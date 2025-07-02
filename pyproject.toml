@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "py-project-django-drf"
+version = "0.1.0"
+description = ""
+authors = ["Admin <alexander_kozhanov@mail.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
