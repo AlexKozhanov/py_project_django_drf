@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'Ims',
     'users',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -98,3 +99,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Воспринимай мою модель User за свою для авторизации пользователя
 # AUTH_USER_MODEL = 'YourAppName.YourClassName'
 AUTH_USER_MODEL = 'users.User'
+
+#Filters
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}

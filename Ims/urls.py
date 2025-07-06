@@ -1,12 +1,12 @@
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
-from Ims.views import   CourseViewSet,\
-                        LessonListAPIView,\
-                        LessonCreateAPIView,\
-                        LessonRetrieveAPIView,\
-                        LessonUpdateAPIView,\
-                        LessonDestroyAPIView
+from Ims.views import CourseViewSet, \
+    LessonListAPIView, \
+    LessonCreateAPIView, \
+    LessonRetrieveAPIView, \
+    LessonUpdateAPIView, \
+    LessonDestroyAPIView
 from Ims.apps import ImsConfig
 
 app_name = ImsConfig.name
