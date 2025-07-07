@@ -34,6 +34,7 @@ class CourseDetailSerializer(ModelSerializer):
             'description',
             'count_lesson_in_course',
             'lessons_in_course',
+            'owner',
         )
 
 
