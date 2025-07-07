@@ -29,7 +29,7 @@ class Course(models.Model):
         null=True,
         blank=True,
         verbose_name="Автор курса",
-        help_text="Укажите автора курса",)
+        help_text="Укажите автора курса", )
 
     class Meta:
         verbose_name = 'Курс'
@@ -81,12 +81,31 @@ class Lesson(models.Model):
         null=True,
         blank=True,
         verbose_name="Автор урока",
-        help_text="Укажите автора урока",)
+        help_text="Укажите автора урока", )
 
     class Meta:
         verbose_name = 'Урок'
         verbose_name_plural = 'Уроки'
-        ordering = ['name', 'course', 'description', 'png', 'link', 'owner',]
+        ordering = ['name', 'course', 'description', 'png', 'link', 'owner', ]
 
     def __str__(self):
         return self.name
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        related_name="subscriptions",
+    )
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        verbose_name="Курс",
+        related_name="subscriptions",
+    )
+
+    class Meta:
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"

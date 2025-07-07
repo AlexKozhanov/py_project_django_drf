@@ -1,12 +1,14 @@
 from django.urls import path
 from rest_framework.routers import SimpleRouter
-
-from Ims.views import CourseViewSet, \
-    LessonListAPIView, \
-    LessonCreateAPIView, \
-    LessonRetrieveAPIView, \
-    LessonUpdateAPIView, \
-    LessonDestroyAPIView
+from Ims.views import (
+    CourseViewSet,
+    LessonListAPIView,
+    LessonCreateAPIView,
+    LessonRetrieveAPIView,
+    LessonUpdateAPIView,
+    LessonDestroyAPIView,
+    SubscriptionAPIView
+)
 from Ims.apps import ImsConfig
 
 app_name = ImsConfig.name
@@ -20,6 +22,7 @@ urlpatterns = [
     path("lesson/<int:pk>/", LessonRetrieveAPIView.as_view(), name='lesson_retrieve'),
     path("lesson/<int:pk>/update/", LessonUpdateAPIView.as_view(), name='lesson_update'),
     path("lesson/<int:pk>/delete/", LessonDestroyAPIView.as_view(), name='lesson_delete'),
+    path("subscription/", SubscriptionAPIView.as_view(), name='subscription'),
 ]
 
 urlpatterns += router.urls
