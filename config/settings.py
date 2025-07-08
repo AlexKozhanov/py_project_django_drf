@@ -3,7 +3,8 @@ from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+# override=True - явно перезаписывай переменные окружения, если они уже объявлены
+load_dotenv(override=True)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
@@ -121,3 +122,27 @@ SIMPLE_JWT = {
 
 # STRIPE
 STRIPE_API_KEY = os.getenv('STRIPE_API_KEY')
+
+# CELERY
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+# REDIS
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_CACHE_BACKEND = 'default'
+
+# Подключение почты Яндекс
+# Адрес почтового сервера — smtp.yandex.ru.
+# Защита соединения — SSL.
+# Порт — 465. Если почтовый клиент начинает соединение без шифрования — 587.
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'iVasya2033@yandex.ru'
+EMAIL_HOST_PASSWORD = 'znwlirhdwkdnopwb'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+SERVER_EMAIL = EMAIL_HOST_USER

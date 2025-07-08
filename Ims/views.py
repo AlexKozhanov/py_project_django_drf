@@ -26,6 +26,8 @@ from django.shortcuts import get_object_or_404
 # Swagger
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+# Celery
+from Ims.tasks import send_course_update_notification
 
 
 # Viewsets
@@ -43,21 +45,21 @@ class CourseViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        operation_summary="Обновление курса",
-        operation_description="Обновление курса. Доступно Автору курса из группы moder.",
-        tags=["Курсы"],
-    )
-    def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+    # @swagger_auto_schema(
+    #     operation_summary="Обновление курса",
+    #     operation_description="Обновление курса. Доступно Автору курса из группы moder.",
+    #     tags=["Курсы"],
+    # )
+    # def update(self, request, *args, **kwargs):
+    #     return super().update(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        operation_summary="Частичное обновление курса",
-        operation_description="Частичное обновление курса. Доступно Автору курса из группы moder.",
-        tags=["Курсы"],
-    )
-    def partial_update(self, request, *args, **kwargs):
-        return super().partial_update(request, *args, **kwargs)
+    # @swagger_auto_schema(
+    #     operation_summary="Частичное обновление курса",
+    #     operation_description="Частичное обновление курса. Доступно Автору курса из группы moder.",
+    #     tags=["Курсы"],
+    # )
+    # def partial_update(self, request, *args, **kwargs):
+    #     return super().partial_update(request, *args, **kwargs)
 
     @swagger_auto_schema(
         operation_summary="Удаление курса",
@@ -77,6 +79,10 @@ class CourseViewSet(ModelViewSet):
         course = serializer.save()
         course.owner = self.request.user
         course.save()
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        send_course_update_notification.delay(instance.id)
 
     def get_permissions(self):
         if self.action == 'create':
