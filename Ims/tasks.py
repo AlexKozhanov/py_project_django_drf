@@ -6,6 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 @shared_task
 def send_course_update_notification(course_id):
     try:

@@ -1,4 +1,3 @@
-from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 # Viewsets
@@ -140,7 +139,7 @@ class CoursePaymentAPIView(APIView):
     )
     def post(self, request, course_id):
         course = get_object_or_404(Course, id=course_id)
-        user = request.user
+        # user = request.user
 
         # Создаем продукт и цену в Stripe
         product_id = create_stripe_product(course)

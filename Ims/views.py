@@ -40,7 +40,9 @@ class CourseViewSet(ModelViewSet):
         operation_summary="Создание курса",
         operation_description="Создание нового курса. Недоступно для группы moder.",
         tags=["Курсы"],
-        responses={201: CourseSerializer,403: "Forbidden (если пользователь - moder)",},
+        responses={
+            201: CourseSerializer, 403: "Forbidden (если пользователь - moder)",
+        },
     )
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)

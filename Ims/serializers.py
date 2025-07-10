@@ -1,6 +1,8 @@
 from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer, \
-    SerializerMethodField, CharField
+from rest_framework.serializers import (
+    ModelSerializer,
+    SerializerMethodField
+)
 
 from Ims.models import Course, Lesson, Subscription
 from Ims.validators import validate_cuss_words, validate_correct_link
