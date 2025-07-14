@@ -1,13 +1,13 @@
 name: Django CI
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        user: actions/checkout@v3
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -15,17 +15,45 @@ jobs:
           python-version: '3.10'
 
       - name: Install flake8
-        run:
+        run: |
           python -m pip install --upgrade pip
           pip install flake8
 
       - name: Run flake8
-        run: flake8 .
-
+        run: |
+          flake8 courses
+          flake8 materials
+          flake8 users
+        
 
   test:
     needs: lint
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      SECRET_KEY: ${{secrets.SECRET_KEY}}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test_db
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
 
     steps:
       - name: Check out code
@@ -37,14 +65,15 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run:
-          python -m pip install --no-cache-dir poetry \
-          && poetry config virtualenvs.create false \
-          && poetry install --without dev,test --no-interaction --no-ansi \
-          && rm -rf $(poetry config cache-dir)/{cache,artifacts}
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Check PostgreSQL connection
+        run: pg_isready -h localhost -p 5432 -U postgres
 
       - name: Run tests
         run: python manage.py test
+
 
   build:
     needs: test
@@ -55,30 +84,44 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Log in in Docker hub
+        env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
         run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t $ {{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} .
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} .
 
-      - name: Build Docker image in Docker hub
-        run: docker push {{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-
+      - name: Push Docker image to Docker Hub
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
 
   deploy:
     needs: build
-    runs_on: ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.9.9
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.SSH_KEY }}
+          ssh-private-key: |
+            ${{ secrets.SSH_KEY }}
+          ssh-public-key: ${{ secrets.SSH_PUB_KEY }}
 
       - name: Deploy to server
-        run:
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-          docker stop myapp || true
-          docker rm myapp || true
-          docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+        run: |
+          ssh -T -o StrictHostKeyChecking=no \
+              -o UserKnownHostsFile=/dev/null \
+              ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          cd /var/www/HomeWork_30.1/
+          sudo git checkout feature/Docker_init
+          sudo git pull
+          if [ -d "static" ]; then
+            echo "Static folder exists."
+            else
+            echo "Static folder does not exist. Creating it now."
+            mkdir static
+            fi
+          sudo sysctl vm.overcommit_memory=1
+          sudo docker compose down || True
+          sudo docker compose up -d --build
           EOF
