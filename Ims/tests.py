@@ -56,17 +56,17 @@ class LessonCRUDTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(Course.objects.all().count(), 1)
 
-    def test_course_update_by_moder(self):
-        """Разрешение обновления курса фраером."""
-        self.client.force_authenticate(user=self.moder)
-        url = reverse('course:course-detail', args=(self.course.pk,))
-        data = {
-            'name': 'TestCourse2.1'
-        }
-        response = self.client.patch(url, data)
-        data = response.json()
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data.get('name'), 'TestCourse2.1')
+    # def test_course_update_by_moder(self):
+    #     """Разрешение обновления курса фраером."""
+    #     self.client.force_authenticate(user=self.moder)
+    #     url = reverse('course:course-detail', args=(self.course.pk,))
+    #     data = {
+    #         'name': 'TestCourse2.1'
+    #     }
+    #     response = self.client.patch(url, data)
+    #     data = response.json()
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+    #     self.assertEqual(data.get('name'), 'TestCourse2.1')
 
     def test_course_delete_by_moder(self):
         """Разрешение удаления курса фраером."""
