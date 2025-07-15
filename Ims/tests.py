@@ -83,64 +83,64 @@ class LessonCRUDTestCase(APITestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_lesson_list(self):
-        """Просмотр урока фраером."""
-        pass
-    #     self.client.force_authenticate(user=self.moder)
-    #     url = reverse('course:course-list')
-    #     response = self.client.get(url)
-    #     data = response.json()
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     result = {
-    #         'count': 1,
-    #         'next': None,
-    #         'previous': None,
-    #         'results': [{
-    #             'id': self.course.pk,
-    #             'lessons_in_course': [{
-    #                 'id': self.lesson.pk,
-    #                 'name': self.lesson.name,
-    #                 'link': self.lesson.link,
-    #                 'description': self.lesson.description,
-    #                 'png': self.lesson.png,
-    #                 'course': self.lesson.course,
-    #                 'owner': self.lesson.owner
-    #             }],
-    #             'name': self.course.name,
-    #             'description': self.course.description,
-    #             'png': self.course.png,
-    #             'owner': self.course.owner}]
-    #     }
-    #     result1 = [{
-    #             'id': self.course.pk,
-    #             'lessons_in_course': [{
-    #                 'id': self.lesson.pk,
-    #                 'name': self.lesson.name,
-    #                 'link': self.lesson.link,
-    #                 'description': self.lesson.description,
-    #                 'png': None,
-    #                 'course': self.lesson.course,
-    #                 'owner': self.lesson.owner
-    #             }],
-    #             'name': self.course.name,
-    #             'description': self.course.description,
-    #             'png': None,
-    #             'owner': self.course.owner}
-    #     ]
-    #     # self.assertEqual(data, result)
-    #     self.assertEqual(data.get('results'), result1)
+    # def test_lesson_list(self):
+    #     """Просмотр урока фраером."""
+    #     pass
+    # #     self.client.force_authenticate(user=self.moder)
+    # #     url = reverse('course:course-list')
+    # #     response = self.client.get(url)
+    # #     data = response.json()
+    # #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+    # #     result = {
+    # #         'count': 1,
+    # #         'next': None,
+    # #         'previous': None,
+    # #         'results': [{
+    # #             'id': self.course.pk,
+    # #             'lessons_in_course': [{
+    # #                 'id': self.lesson.pk,
+    # #                 'name': self.lesson.name,
+    # #                 'link': self.lesson.link,
+    # #                 'description': self.lesson.description,
+    # #                 'png': self.lesson.png,
+    # #                 'course': self.lesson.course,
+    # #                 'owner': self.lesson.owner
+    # #             }],
+    # #             'name': self.course.name,
+    # #             'description': self.course.description,
+    # #             'png': self.course.png,
+    # #             'owner': self.course.owner}]
+    # #     }
+    # #     result1 = [{
+    # #             'id': self.course.pk,
+    # #             'lessons_in_course': [{
+    # #                 'id': self.lesson.pk,
+    # #                 'name': self.lesson.name,
+    # #                 'link': self.lesson.link,
+    # #                 'description': self.lesson.description,
+    # #                 'png': None,
+    # #                 'course': self.lesson.course,
+    # #                 'owner': self.lesson.owner
+    # #             }],
+    # #             'name': self.course.name,
+    # #             'description': self.course.description,
+    # #             'png': None,
+    # #             'owner': self.course.owner}
+    # #     ]
+    # #     # self.assertEqual(data, result)
+    # #     self.assertEqual(data.get('results'), result1)
 
-    def test_lesson_create_by_owner(self):
-        """Создание урока владельцем урока."""
-        pass
-        # self.client.force_authenticate(user=self.owner)
-        # url = reverse("course:lesson_create")
-        # data = {
-        #     'name': 'TestLesson22'
-        # }
-        # response = self.client.post(url, data)
-        # self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        # self.assertEqual(Lesson.objects.count(), 2)
+    # def test_lesson_create_by_owner(self):
+    #     """Создание урока владельцем урока."""
+    #     pass
+    #     # self.client.force_authenticate(user=self.owner)
+    #     # url = reverse("course:lesson_create")
+    #     # data = {
+    #     #     'name': 'TestLesson22'
+    #     # }
+    #     # response = self.client.post(url, data)
+    #     # self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    #     # self.assertEqual(Lesson.objects.count(), 2)
 
     def test_lesson_create_by_moder(self):
         """Запрет создания урока фраером."""

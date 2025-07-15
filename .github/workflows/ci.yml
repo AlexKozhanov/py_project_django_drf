@@ -33,7 +33,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_db
+          POSTGRES_DB: test_db1
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
         ports:
@@ -48,7 +48,7 @@ jobs:
       SECRET_KEY: ${{secrets.SECRET_KEY}}
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: test_db
+      POSTGRES_DB: test_db1
       POSTGRES_HOST: localhost
       POSTGRES_PORT: 5432
 
